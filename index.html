@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VELO_KINETIC | Precision Urban Mobility</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "tertiary-container": "#d4e2fc",
+          "surface-container-low": "#191c1e",
+          "surface-bright": "#363a3b",
+          "on-tertiary-fixed-variant": "#3a485c",
+          "on-background": "#e0e3e5",
+          "tertiary-fixed": "#d5e3fd",
+          "secondary-container": "#3f465c",
+          "on-primary-fixed-variant": "#00513c",
+          "on-tertiary": "#233144",
+          "on-primary": "#003828",
+          "on-secondary-container": "#adb4ce",
+          "surface-container-lowest": "#0b0f10",
+          "on-secondary-fixed-variant": "#3f465c",
+          "secondary-fixed": "#dae2fd",
+          "surface-dim": "#101415",
+          "tertiary-fixed-dim": "#b9c7e0",
+          "on-secondary-fixed": "#131b2e",
+          "tertiary": "#fffdff",
+          "error": "#ffb4ab",
+          "surface": "#101415",
+          "primary-fixed-dim": "#00e1ab",
+          "on-error": "#690005",
+          "surface-container-highest": "#323537",
+          "primary": "#fbfffa",
+          "secondary": "#bec6e0",
+          "primary-container": "#00ffc2",
+          "on-surface-variant": "#b9cbc1",
+          "on-surface": "#e0e3e5",
+          "on-tertiary-container": "#56647a",
+          "on-primary-container": "#007255",
+          "surface-container-high": "#272a2c",
+          "primary-fixed": "#36ffc4",
+          "outline-variant": "#3a4a43",
+          "outline": "#83958c",
+          "error-container": "#93000a",
+          "secondary-fixed-dim": "#bec6e0",
+          "surface-variant": "#323537",
+          "inverse-on-surface": "#2d3133",
+          "on-error-container": "#ffdad6",
+          "surface-container": "#1d2022",
+          "on-tertiary-fixed": "#0d1c2f",
+          "inverse-primary": "#006c50",
+          "surface-tint": "#00e1ab",
+          "on-secondary": "#283044",
+          "on-primary-fixed": "#002116",
+          "background": "#101415",
+          "inverse-surface": "#e0e3e5"
+        },
+        borderRadius: {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        spacing: {
+          "unit": "4px",
+          "container-max": "1280px",
+          "margin-mobile": "20px",
+          "margin-desktop": "80px",
+          "gutter": "24px"
+        },
+        fontFamily: {
+          "headline-lg-mobile": ["Space Grotesk"],
+          "label-sm": ["JetBrains Mono"],
+          "label-md": ["JetBrains Mono"],
+          "headline-md": ["Space Grotesk"],
+          "display-lg": ["Space Grotesk"],
+          "body-lg": ["Inter"],
+          "body-md": ["Inter"],
+          "headline-lg": ["Space Grotesk"]
+        },
+        fontSize: {
+          "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+          "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "400"}],
+          "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+          "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+          "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+          "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+          "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+          "headline-lg": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}]
+        }
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .glow-sm { box-shadow: 0 0 15px -3px rgba(0, 225, 171, 0.3); }
+  .glow-hover:hover { box-shadow: 0 0 20px rgba(0, 225, 171, 0.2); }
+  .glass-card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .glass-panel {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(0, 225, 171, 0.1);
+  }
+  .kinetic-gradient { background: linear-gradient(135deg, #00ffc2 0%, #00e1ab 100%); }
+  .battery-fill { transition: width 1s ease-in-out; background: linear-gradient(90deg, #00e1ab, #36ffc4); }
+  .bg-motion-blur {
+    background-image: linear-gradient(to bottom right, rgba(16, 20, 21, 0.9), rgba(16, 20, 21, 0.6)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuC2oUfDPblaJwppnb6RTlVjU7Xs4BPxvt-uZDETOpzeb0zdBNMRci8cQKOtFgkeFkaicvxKbxkaBc3slskg2Ov4KDyPSbLO3f8iKi6DyJPtnSTRnomWBhChRctf2jCZzuStaPSWagEbQbVQHb_B_SrFps5L7IXeNluxnk6m6P2lqsI3sFLrcjJSseAVJ_WC6CFbPyLe8Nwh61l8Kenlo-CGgxuWdXRxO7Ko1vGVj_oSqy49-CqAxJ5nb-2ZD3YX8FKzZc8USFe0aa2Z);
+    background-size: cover;
+    background-position: center;
+  }
+  /* Page system */
+  .page { display: none; }
+  .page.active { display: block; }
+  /* Smooth page transitions */
+  .page { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  /* Mobile menu */
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: block; }
+  /* Active nav link */
+  .nav-link.active { color: #00e1ab !important; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+
+<!-- ===== GLOBAL TOP NAVIGATION ===== -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10">
+  <nav class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto w-full">
+    <button onclick="showPage('home')" class="font-headline-md text-headline-md font-bold tracking-tighter text-primary-fixed-dim hover:opacity-80 transition-opacity">VELO_KINETIC</button>
+    <div class="hidden md:flex items-center gap-8">
+      <button onclick="showPage('home')" class="nav-link text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary-fixed transition-all duration-300" data-page="home">Home</button>
+      <button onclick="showPage('home'); scrollToFleet()" class="nav-link text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary-fixed transition-all duration-300">Bikes</button>
+      <button onclick="showPage('home'); scrollToHowItWorks()" class="nav-link text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary-fixed transition-all duration-300">How It Works</button>
+      <button onclick="showPage('home'); scrollToLocations()" class="nav-link text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary-fixed transition-all duration-300">Locations</button>
+    </div>
+    <div class="flex items-center gap-4">
+      <button onclick="showPage('login')" class="hidden md:block text-on-surface font-medium font-label-md text-label-md hover:text-primary-fixed transition-all duration-300">Login</button>
+      <button onclick="showPage('register')" class="kinetic-gradient text-on-primary-container font-label-md text-label-md px-6 py-2.5 rounded-full font-bold active:scale-95 transition-transform">Rent Now</button>
+      <!-- Mobile menu toggle -->
+      <button onclick="toggleMobileMenu()" class="md:hidden text-on-surface" aria-label="Menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </nav>
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden bg-surface/95 backdrop-blur-xl border-t border-outline-variant/10 px-margin-mobile py-4 flex flex-col gap-4">
+    <button onclick="showPage('home'); toggleMobileMenu()" class="text-left text-on-surface-variant font-label-md text-label-md hover:text-primary-fixed transition-all">Home</button>
+    <button onclick="showPage('login'); toggleMobileMenu()" class="text-left text-on-surface-variant font-label-md text-label-md hover:text-primary-fixed transition-all">Login</button>
+    <button onclick="showPage('register'); toggleMobileMenu()" class="text-left text-on-surface-variant font-label-md text-label-md hover:text-primary-fixed transition-all">Register</button>
+    <button onclick="showPage('dashboard'); toggleMobileMenu()" class="text-left text-on-surface-variant font-label-md text-label-md hover:text-primary-fixed transition-all">Dashboard</button>
+  </div>
+</header>
+
+<!-- ===================================== -->
+<!-- PAGE: HOME / LANDING                  -->
+<!-- ===================================== -->
+<div id="page-home" class="page active">
+  <main>
+    <!-- Hero Section -->
+    <section id="section-hero" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <div class="absolute inset-0 z-0">
+        <img class="w-full h-full object-cover opacity-40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT5G538CQ4R_9zYmFXV7p7bwYbRv057wxC4gQESQ6e7Jw-TMZ-mAwPFoJgMliPBDfZOd6apVyeUfoRCrjRR-9980sjHtfcWrHMgxG-ebIOuIDbIQOLmw5brHFjcCoDgMQ5dFFrb5AYAyTQ_4F4dYahNSra-sIMTYMIUOw8q0RJr4Z8e13oPOeULPWfnzReZz_gVMsfKfZ463toXLLn1mIKG1tpXoii-oVWn8qbt1TLH4jv7onRbnTFGHmVJybhgWt0MMwTvfFRWH2B" alt="E-Bike in futuristic city"/>
+        <div class="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
+      </div>
+      <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-container/10 border border-primary-fixed-dim/20 mb-6">
+            <span class="w-2 h-2 rounded-full bg-primary-fixed animate-pulse"></span>
+            <span class="text-primary-fixed-dim font-label-sm text-label-sm uppercase tracking-widest">Available Now in NYC</span>
+          </div>
+          <h1 class="font-display-lg text-display-lg text-on-surface mb-6 leading-tight">
+            The Future of <br/><span class="text-primary-fixed-dim">Urban Flow</span>
+          </h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-lg">
+            Precision-engineered e-bikes for the modern commuter. Experience the effortless kinetic energy of a smarter, greener city commute.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button onclick="showPage('register')" class="kinetic-gradient text-on-primary-container font-label-md text-label-md px-8 py-4 rounded-full font-bold active:scale-95 transition-transform glow-sm">Rent Now</button>
+            <button onclick="scrollToFleet()" class="border border-primary-fixed-dim text-primary-fixed-dim font-label-md text-label-md px-8 py-4 rounded-full font-bold hover:bg-primary-fixed-dim/5 transition-all">View Fleet</button>
+          </div>
+        </div>
+      </div>
+      <!-- Hero Tech Stats Overlay -->
+      <div class="absolute bottom-12 right-20 hidden lg:flex gap-6">
+        <div class="glass-card p-6 rounded-xl border-l-4 border-l-primary-fixed-dim w-48">
+          <div class="text-on-surface-variant font-label-sm text-label-sm mb-1">MAX RANGE</div>
+          <div class="font-headline-md text-headline-md text-on-surface">85<span class="text-sm ml-1 text-primary-fixed-dim">mi</span></div>
+        </div>
+        <div class="glass-card p-6 rounded-xl border-l-4 border-l-primary-fixed-dim w-48">
+          <div class="text-on-surface-variant font-label-sm text-label-sm mb-1">TOP SPEED</div>
+          <div class="font-headline-md text-headline-md text-on-surface">28<span class="text-sm ml-1 text-primary-fixed-dim">mph</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="section-how" class="py-32 bg-surface-container-low">
+      <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+        <div class="text-center mb-20">
+          <h2 class="font-headline-lg text-headline-lg text-on-surface mb-4 uppercase tracking-tight">How It Works</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant">Seamless mobility in three precise movements.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div class="flex flex-col items-center text-center group">
+            <div class="w-20 h-20 rounded-2xl bg-surface-container-highest flex items-center justify-center mb-8 group-hover:bg-primary-container/20 transition-colors duration-500">
+              <span class="material-symbols-outlined text-primary-fixed-dim text-4xl">qr_code_scanner</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Scan</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">Locate a Velo Kinetic station nearby and unlock your ride with a single tap on our mobile app.</p>
+          </div>
+          <div class="flex flex-col items-center text-center group">
+            <div class="w-20 h-20 rounded-2xl bg-surface-container-highest flex items-center justify-center mb-8 group-hover:bg-primary-container/20 transition-colors duration-500">
+              <span class="material-symbols-outlined text-primary-fixed-dim text-4xl">electric_bolt</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Ride</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">Engage the high-performance kinetic motor and glide through traffic with effortless precision.</p>
+          </div>
+          <div class="flex flex-col items-center text-center group">
+            <div class="w-20 h-20 rounded-2xl bg-surface-container-highest flex items-center justify-center mb-8 group-hover:bg-primary-container/20 transition-colors duration-500">
+              <span class="material-symbols-outlined text-primary-fixed-dim text-4xl">local_parking</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Park</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">Dock at any designated smart station to end your journey and contribute to a greener city.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Fleet (Bento Grid Style) -->
+    <section id="section-fleet" class="py-32 bg-surface">
+      <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+        <div class="flex justify-between items-end mb-16">
+          <div>
+            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">The Fleet</h2>
+            <p class="font-body-md text-body-md text-on-surface-variant">Precision machines for every urban mission.</p>
+          </div>
+          <button class="hidden md:flex items-center gap-2 text-primary-fixed-dim font-label-md text-label-md border-b border-primary-fixed-dim pb-1">
+            View All Models <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+          <!-- Bike 1: Urban Glide -->
+          <div class="md:col-span-8 bg-surface-container rounded-3xl overflow-hidden group flex flex-col md:flex-row">
+            <div class="p-8 md:p-12 md:w-1/2 flex flex-col justify-between">
+              <div>
+                <span class="px-3 py-1 rounded bg-primary-fixed-dim/10 text-primary-fixed-dim font-label-sm text-label-sm mb-4 inline-block">MOST POPULAR</span>
+                <h3 class="font-headline-lg text-headline-lg text-on-surface mb-2">Kinetic Urban</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant mb-8">The ultimate daily driver for the city specialist.</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <div class="text-on-surface-variant font-label-sm text-label-sm">RANGE</div>
+                  <div class="font-headline-md text-headline-md">60mi</div>
+                </div>
+                <div>
+                  <div class="text-on-surface-variant font-label-sm text-label-sm">WEIGHT</div>
+                  <div class="font-headline-md text-headline-md">18kg</div>
+                </div>
+              </div>
+            </div>
+            <div class="md:w-1/2 relative h-64 md:h-auto overflow-hidden">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEZEOKWNAuPQXO04wSmOjnz2W6MjNfWr13nSOLzeLRF7kjUrzVbruADOutPkETtZS3HZUyZEPSn4jz1XYpB6ibqLJrmvy6XH16i-oQT2P9E6tL8x1RtX15yq8VyToMeloLKB8YWCZCLQdHWrupWUdKAoQCwdGnbAhQXEjpqtjm4kyCpEC4oEJOB-5pqokBPxGM2uLM_dgA3lrfi6zNPdy-pn_Zpgl4uBsLqCY8TiiYOnRtrgbxoq2CYmmJvOLoltI0nG8V5nk0rh-s" alt="Kinetic Urban Bike"/>
+            </div>
+          </div>
+          <!-- Bike 2: Cargo Master -->
+          <div class="md:col-span-4 bg-surface-container rounded-3xl overflow-hidden group">
+            <div class="p-8">
+              <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Cargo X</h3>
+              <div class="text-primary-fixed-dim font-label-md text-label-md mb-6">Heavy Duty Payload</div>
+              <div class="h-48 mb-8 relative">
+                <img class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqKn1RpNSjh8srQdRT_k0T5OyPyhKMWhFVCQFyrjJTfimIoX18JnItOgmljPCuoE3Pam3EpbkQrgxGWmZWeCbj9QxCsEnJoM3rGsYwYilIoLNaf7mh7zSuKbeyJtLlm-9JkpIORyKvBpjL1X4VpXPLfF6Mc0tQCMQucyzxPO3w_O6NVo1flRUhRFgm6NveOPXY0UuUqqqjZRkXEKW5RnXV8pDfOHRf-vctFE3FwHS7Pt0iFyFBBkxcbYvthctJXXeq0bJHPg522oLI" alt="Cargo X Bike"/>
+              </div>
+              <div class="flex justify-between items-end border-t border-outline-variant/20 pt-6">
+                <div>
+                  <div class="text-on-surface-variant font-label-sm text-label-sm uppercase">Power</div>
+                  <div class="font-headline-md text-headline-md">750W</div>
+                </div>
+                <button class="w-12 h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-fixed-dim hover:text-on-primary-container transition-all">
+                  <span class="material-symbols-outlined">add</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Bike 3: Peak Performance -->
+          <div class="md:col-span-4 bg-surface-container rounded-3xl overflow-hidden group">
+            <div class="p-8">
+              <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Summit E-MTB</h3>
+              <div class="text-primary-fixed-dim font-label-md text-label-md mb-6">Off-Road Precision</div>
+              <div class="h-48 mb-8 relative">
+                <img class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCudOUH9TSgK70VDsETJAXYMqTk--UMprtm-r_HTH5p_ysaG_KE0KUY3yif3CWZlQ5Y0SgJmwwxT5JpDPzFjeV2ucoF4PRzTkj7BpBAKKkdRNs4hPV65u45wNXvMbYyIqILjiNrVkBQAjhohxte03xQySAszcJnxR0HfR0B3TlN17xteTIaLgJV2n1rCArcxQPAeuFb22ZtK0ekaBEu-vz-wFxsV00xFr67DhV2Qy5UMQiUh-Fe10K5-x1Ww7zltZWxbuKPW_KbHVAs" alt="Summit E-MTB"/>
+              </div>
+              <div class="flex justify-between items-end border-t border-outline-variant/20 pt-6">
+                <div>
+                  <div class="text-on-surface-variant font-label-sm text-label-sm uppercase">Torque</div>
+                  <div class="font-headline-md text-headline-md">95Nm</div>
+                </div>
+                <button class="w-12 h-12 rounded-full border border-outline flex items-center justify-center hover:bg-primary-fixed-dim hover:text-on-primary-container transition-all">
+                  <span class="material-symbols-outlined">add</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Sustainability Teaser -->
+          <div class="md:col-span-8 bg-primary-fixed-dim/5 border border-primary-fixed-dim/20 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative">
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-primary-fixed-dim/10 blur-[100px] rounded-full"></div>
+            <div class="relative z-10 md:w-2/3">
+              <h3 class="font-headline-lg text-headline-lg text-on-surface mb-4">The Kinetic Impact</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-8 max-w-md">Every mile on a Velo Kinetic bike replaces carbon-heavy transit. We are on a mission to save 1 Million tons of CO2 by 2026.</p>
+              <div class="flex items-center gap-4">
+                <div class="h-1.5 flex-1 bg-surface-container-highest rounded-full overflow-hidden">
+                  <div class="h-full w-[65%] kinetic-gradient"></div>
+                </div>
+                <span class="font-label-md text-label-md text-primary-fixed-dim">652,410 Tons Saved</span>
+              </div>
+            </div>
+            <div class="relative z-10 md:w-1/3 flex flex-col items-center">
+              <div class="text-6xl font-display-lg text-primary-fixed-dim mb-2">94%</div>
+              <div class="text-on-surface-variant font-label-sm text-label-sm text-center">Renewable Energy Powered Network</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Locations Section -->
+    <section id="section-locations" class="py-32 bg-surface-dim">
+      <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+        <div class="glass-card rounded-[40px] overflow-hidden flex flex-col md:flex-row">
+          <div class="md:w-1/2 p-12 md:p-20 flex flex-col justify-center">
+            <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6">Find Your Flow</h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mb-10">Our network of smart kinetic stations is expanding across the globe. Access premium mobility wherever your journey takes you.</p>
+            <div class="space-y-6">
+              <div class="flex items-center justify-between p-4 rounded-xl bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer border border-outline-variant/10">
+                <div class="flex items-center gap-4">
+                  <span class="material-symbols-outlined text-primary-fixed-dim">location_on</span>
+                  <span class="font-headline-md text-headline-md text-sm">New York City, NY</span>
+                </div>
+                <span class="text-primary-fixed-dim font-label-sm text-label-sm">42 STATIONS</span>
+              </div>
+              <div class="flex items-center justify-between p-4 rounded-xl bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer border border-outline-variant/10">
+                <div class="flex items-center gap-4">
+                  <span class="material-symbols-outlined text-primary-fixed-dim">location_on</span>
+                  <span class="font-headline-md text-headline-md text-sm">London, UK</span>
+                </div>
+                <span class="text-primary-fixed-dim font-label-sm text-label-sm">28 STATIONS</span>
+              </div>
+              <div class="flex items-center justify-between p-4 rounded-xl bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer border border-outline-variant/10">
+                <div class="flex items-center gap-4">
+                  <span class="material-symbols-outlined text-primary-fixed-dim">location_on</span>
+                  <span class="font-headline-md text-headline-md text-sm">Berlin, DE</span>
+                </div>
+                <span class="text-primary-fixed-dim font-label-sm text-label-sm">31 STATIONS</span>
+              </div>
+            </div>
+          </div>
+          <div class="md:w-1/2 min-h-[400px] bg-surface-container-highest relative">
+            <img class="w-full h-full object-cover grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJSVTeDa-KcCHtE-DFaylrDVaspx9fX8_hKXZB5XRuHXdJUseWvxE4yl6jpxsXvKMqKROIXjiKf7gm6Ic1PjnAlgheOYRBbVJ3plhSnl3AzFnl02j8UQmj2A87hxDiLCoUZlfk77vmx4YLCAd2hftSEgNDis0ZACX92vrESHrUIy6JjM1YvTr0e3LmeN7OPZZQwZJ1Pdk_09C1dR9hNJ1vsH_LVTfrTFz5Pmqrhn85IhxNES4UVek-YUNXA5717_LeURnjJuS3Llg5" alt="City Map"/>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-16 h-16 rounded-full kinetic-gradient flex items-center justify-center glow-sm">
+                <span class="material-symbols-outlined text-on-primary-container text-2xl">near_me</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="py-32 bg-surface text-center px-margin-mobile relative overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary-fixed-dim/50 to-transparent"></div>
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h2 class="font-display-lg text-headline-lg md:text-display-lg text-on-surface mb-8">Ready for the Future?</h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mb-12">Join thousands of riders who have already upgraded their urban experience. No keys, no fuel, no limits.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-6">
+          <button onclick="showPage('register')" class="kinetic-gradient text-on-primary-container font-label-md text-label-md px-12 py-5 rounded-full font-bold active:scale-95 transition-transform text-lg">Download the App</button>
+          <button class="border border-outline-variant text-on-surface font-label-md text-label-md px-12 py-5 rounded-full font-bold hover:bg-surface-container transition-all text-lg">Business Rental</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-surface-dim w-full py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+      <div class="space-y-6">
+        <div class="font-headline-md text-headline-md font-bold text-on-surface">VELO_KINETIC</div>
+        <p class="font-body-md text-body-md text-on-surface-variant max-w-xs">Precision urban mobility solutions for the sustainable future of our cities.</p>
+      </div>
+      <div class="flex flex-col gap-4">
+        <h4 class="font-label-md text-label-md text-primary-fixed-dim uppercase tracking-widest mb-2">Fleet</h4>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Urban Glide</a>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Cargo Master</a>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Peak Performance</a>
+      </div>
+      <div class="flex flex-col gap-4">
+        <h4 class="font-label-md text-label-md text-primary-fixed-dim uppercase tracking-widest mb-2">Resources</h4>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Fleet Support</a>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Sustainability Report</a>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Safety Guidelines</a>
+      </div>
+      <div class="flex flex-col gap-4">
+        <h4 class="font-label-md text-label-md text-primary-fixed-dim uppercase tracking-widest mb-2">Legal</h4>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Terms of Service</a>
+        <a class="text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Data Security</a>
+      </div>
+    </div>
+    <div class="mt-16 pt-8 border-t border-outline-variant/10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center">
+      <p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 VELO_KINETIC. PRECISION URBAN MOBILITY.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: LOGIN                           -->
+<!-- ===================================== -->
+<div id="page-login" class="page">
+  <div class="fixed inset-0 z-0 bg-motion-blur"></div>
+  <main class="relative z-10 flex-grow flex items-center justify-center px-margin-mobile md:px-margin-desktop py-12 min-h-screen pt-28">
+    <div class="w-full max-w-[480px]">
+      <!-- Brand Anchor -->
+      <div class="flex flex-col items-center mb-10">
+        <div class="mb-4 flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary-fixed-dim text-4xl">electric_bolt</span>
+          <h1 class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary-fixed-dim">VELO_KINETIC</h1>
+        </div>
+        <p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Precision Urban Mobility</p>
+      </div>
+      <!-- Login Card -->
+      <div class="glass-panel rounded-xl p-8 md:p-10 shadow-2xl border-t border-t-primary-fixed-dim/30">
+        <div class="mb-8">
+          <h2 class="font-headline-md text-headline-md text-on-surface mb-2">Welcome Back</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant">Access your performance stats and bike fleet.</p>
+        </div>
+        <form class="space-y-6" onsubmit="event.preventDefault(); showPage('dashboard');">
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-primary-fixed-dim flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">alternate_email</span>
+              Email Address
+            </label>
+            <input class="w-full bg-surface-container-low border-outline-variant focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed text-on-surface rounded-lg px-4 py-3 transition-all duration-300 font-body-md outline-none border" placeholder="name@precision.com" type="email"/>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="font-label-md text-label-md text-primary-fixed-dim flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">lock</span>
+                Password
+              </label>
+              <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Forgot Password?</a>
+            </div>
+            <input class="w-full bg-surface-container-low border-outline-variant focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed text-on-surface rounded-lg px-4 py-3 transition-all duration-300 font-body-md outline-none border" placeholder="••••••••" type="password"/>
+          </div>
+          <div class="pt-4">
+            <button class="w-full bg-gradient-to-r from-primary-fixed-dim to-primary-container text-on-primary-container font-headline-md text-headline-md py-4 rounded-full font-bold shadow-lg active:scale-95 transition-all duration-300 glow-hover" type="submit">
+              Unlock Your Ride
+            </button>
+          </div>
+        </form>
+        <div class="mt-8 pt-8 border-t border-outline-variant/30 flex flex-col items-center gap-4">
+          <p class="font-body-md text-body-md text-on-surface-variant">New to the movement?</p>
+          <button onclick="showPage('register')" class="font-label-md text-label-md text-primary-fixed-dim border border-primary-fixed-dim px-8 py-2 rounded-full hover:bg-primary-fixed-dim hover:text-on-primary transition-all duration-300">
+            Join the Movement
+          </button>
+        </div>
+      </div>
+      <!-- Security Badge -->
+      <div class="mt-8 flex items-center justify-center gap-4 text-on-surface-variant/60">
+        <div class="flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">verified_user</span>
+          <span class="font-label-sm text-label-sm uppercase tracking-tighter">Encrypted Protocol</span>
+        </div>
+        <div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+        <div class="flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">sensors</span>
+          <span class="font-label-sm text-label-sm uppercase tracking-tighter">Live Status</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Login Footer -->
+  <footer class="relative z-10 w-full py-12 bg-surface-dim/40 backdrop-blur-sm border-t border-outline-variant/10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+      <div class="space-y-4">
+        <div class="font-headline-md text-headline-md font-bold text-on-surface">VELO_KINETIC</div>
+        <p class="font-body-md text-body-md text-on-surface-variant max-w-[240px]">Precision urban mobility engineered for the eco-futurist professional.</p>
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="font-label-md text-label-md text-primary-fixed-dim mb-2">Navigation</p>
+        <button onclick="showPage('home')" class="text-left font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors">Home</button>
+        <button onclick="showPage('home'); scrollToFleet()" class="text-left font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors">Fleet</button>
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="font-label-md text-label-md text-primary-fixed-dim mb-2">Legal</p>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Terms of Service</a>
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="font-label-md text-label-md text-primary-fixed-dim mb-2">System</p>
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-primary-fixed animate-pulse"></div>
+          <span class="font-label-sm text-label-sm text-on-surface">Network Online</span>
+        </div>
+        <p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 VELO_KINETIC.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: REGISTER                        -->
+<!-- ===================================== -->
+<div id="page-register" class="page">
+  <!-- Visual Background Accents -->
+  <div class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-20">
+    <div class="absolute top-[10%] left-[5%] w-[40vw] h-[40vw] bg-primary-fixed-dim/5 rounded-full blur-[150px]"></div>
+    <div class="absolute bottom-[10%] right-[5%] w-[30vw] h-[30vw] bg-secondary-container/5 rounded-full blur-[120px]"></div>
+  </div>
+
+  <main class="min-h-screen pt-24 pb-12 flex items-center justify-center">
+    <div class="max-w-container-max w-full px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <!-- Left Column: Value Proposition -->
+      <div class="relative order-2 lg:order-1">
+        <div class="absolute -top-20 -left-20 w-64 h-64 bg-primary-fixed-dim/10 rounded-full blur-[100px]"></div>
+        <div class="relative z-10 space-y-8">
+          <div class="space-y-4">
+            <span class="font-label-sm text-label-sm text-primary-fixed-dim tracking-[0.2em]">MEMBERSHIP</span>
+            <h1 class="font-display-lg text-display-lg text-primary uppercase leading-none">Join the<br/>Eco-Revolution</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">Experience the next generation of precision urban mobility. Seamless, sustainable, and designed for the modern professional.</p>
+          </div>
+          <!-- Bento-style Perk Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-6 bg-surface-container-low border border-outline-variant/20 rounded-xl hover:border-primary-fixed-dim/40 transition-colors group">
+              <span class="material-symbols-outlined text-primary-fixed-dim mb-4 text-3xl">eco</span>
+              <h3 class="font-headline-md text-headline-md text-primary-fixed-dim mb-2">Zero emissions</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant">Carbon-neutral transport for a cleaner, smarter city environment.</p>
+            </div>
+            <div class="p-6 bg-surface-container-low border border-outline-variant/20 rounded-xl hover:border-primary-fixed-dim/40 transition-colors group">
+              <span class="material-symbols-outlined text-primary-fixed-dim mb-4 text-3xl">bolt</span>
+              <h3 class="font-headline-md text-headline-md text-primary-fixed-dim mb-2">Priority access</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant">Instant unlocking and reservation of our premium Kinetic fleet.</p>
+            </div>
+            <div class="sm:col-span-2 p-6 bg-surface-container-low border border-outline-variant/20 rounded-xl hover:border-primary-fixed-dim/40 transition-colors group flex items-center justify-between overflow-hidden">
+              <div class="max-w-[60%]">
+                <h3 class="font-headline-md text-headline-md text-primary-fixed-dim mb-2">Flat rates</h3>
+                <p class="font-body-md text-body-md text-on-surface-variant">Transparent pricing with no hidden costs or peak surges.</p>
+              </div>
+              <div class="relative w-32 h-32 opacity-20 group-hover:opacity-40 transition-opacity">
+                <span class="material-symbols-outlined text-8xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">payments</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right Column: Signup Form -->
+      <div class="order-1 lg:order-2">
+        <div class="bg-surface-container/50 backdrop-blur-2xl p-8 md:p-12 rounded-3xl border border-outline-variant/10 shadow-2xl relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-primary-fixed-dim/5 blur-3xl rounded-full"></div>
+          <div class="relative z-10 space-y-8">
+            <div class="text-center lg:text-left">
+              <h2 class="font-headline-lg text-headline-lg text-primary">Create Account</h2>
+              <p class="font-body-md text-body-md text-on-surface-variant mt-2">Start your journey with VELO_KINETIC</p>
+            </div>
+            <form class="space-y-6" onsubmit="event.preventDefault(); showPage('dashboard');">
+              <div class="space-y-2">
+                <label class="font-label-md text-label-md text-on-surface-variant block ml-1">Full Name</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">person</span>
+                  <input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim text-on-surface placeholder:text-on-surface-variant/40 transition-all font-body-md" placeholder="John Kinetic" type="text"/>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="font-label-md text-label-md text-on-surface-variant block ml-1">Email Address</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">alternate_email</span>
+                  <input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim text-on-surface placeholder:text-on-surface-variant/40 transition-all font-body-md" placeholder="name@company.com" type="email"/>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="font-label-md text-label-md text-on-surface-variant block ml-1">Phone Number</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">call</span>
+                  <input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim text-on-surface placeholder:text-on-surface-variant/40 transition-all font-body-md" placeholder="+1 (555) 000-0000" type="tel"/>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="font-label-md text-label-md text-on-surface-variant block ml-1">Password</label>
+                <div class="relative">
+                  <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">lock</span>
+                  <input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pl-12 pr-12 focus:outline-none focus:border-primary-fixed-dim focus:ring-1 focus:ring-primary-fixed-dim text-on-surface placeholder:text-on-surface-variant/40 transition-all font-body-md" placeholder="••••••••" type="password"/>
+                  <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl cursor-pointer hover:text-primary-fixed transition-colors">visibility</span>
+                </div>
+              </div>
+              <div class="pt-4">
+                <button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-5 rounded-full transition-all duration-300 active:scale-95 flex items-center justify-center gap-2" type="submit">
+                  <span>Register Now</span>
+                  <span class="material-symbols-outlined text-xl">arrow_forward</span>
+                </button>
+              </div>
+              <div class="relative py-4 flex items-center gap-4">
+                <div class="flex-grow h-[1px] bg-outline-variant/20"></div>
+                <span class="font-label-sm text-label-sm text-on-surface-variant">OR CONTINUE WITH</span>
+                <div class="flex-grow h-[1px] bg-outline-variant/20"></div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <button class="flex items-center justify-center gap-3 bg-surface-container-low border border-outline-variant/20 py-3 rounded-xl hover:bg-surface-container-high transition-colors font-label-md text-label-md" type="button">
+                  <span class="material-symbols-outlined text-lg">public</span> Google
+                </button>
+                <button class="flex items-center justify-center gap-3 bg-surface-container-low border border-outline-variant/20 py-3 rounded-xl hover:bg-surface-container-high transition-colors font-label-md text-label-md" type="button">
+                  <span class="material-symbols-outlined text-lg">terminal</span> Apple
+                </button>
+              </div>
+            </form>
+            <p class="text-center font-body-md text-body-md text-on-surface-variant">
+              Already have an account? <button onclick="showPage('login')" class="text-primary-fixed-dim hover:underline font-medium">Log in</button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="w-full py-12 bg-surface-dim border-t border-outline-variant/5">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+      <div class="space-y-4">
+        <div class="font-headline-md text-headline-md font-bold text-on-surface">VELO_KINETIC</div>
+        <p class="font-label-sm text-label-sm text-on-surface-variant">PRECISION URBAN MOBILITY.</p>
+      </div>
+      <div>
+        <h4 class="font-label-md text-label-md text-primary-fixed-dim mb-4">Policy</h4>
+        <ul class="space-y-2">
+          <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a></li>
+          <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-label-md text-label-md text-primary-fixed-dim mb-4">Support</h4>
+        <ul class="space-y-2">
+          <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Fleet Support</a></li>
+          <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Safety Guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-label-md text-label-md text-primary-fixed-dim mb-4">Impact</h4>
+        <ul class="space-y-2">
+          <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Sustainability Report</a></li>
+          <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Carbon Tracking</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 text-center border-t border-outline-variant/5 pt-8">
+      <p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">© 2024 VELO_KINETIC. PRECISION URBAN MOBILITY.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: DASHBOARD                       -->
+<!-- ===================================== -->
+<div id="page-dashboard" class="page">
+  <!-- TopNavBar override - handled by global nav -->
+  <div class="flex pt-24 min-h-screen max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop gap-gutter">
+    <!-- Sidebar Navigation -->
+    <aside class="hidden lg:flex flex-col w-64 gap-6 py-8 border-r border-outline-variant/10 shrink-0">
+      <nav class="flex flex-col gap-2">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-fixed-dim/10 text-primary-fixed-dim font-medium transition-all" href="#">
+          <span class="material-symbols-outlined">grid_view</span>
+          <span class="font-label-md text-label-md">Overview</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+          <span class="material-symbols-outlined">directions_bike</span>
+          <span class="font-label-md text-label-md">My Rentals</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+          <span class="material-symbols-outlined">payments</span>
+          <span class="font-label-md text-label-md">Payment</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+          <span class="material-symbols-outlined">support_agent</span>
+          <span class="font-label-md text-label-md">Support</span>
+        </a>
+        <button onclick="showPage('home')" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-all mt-4">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="font-label-md text-label-md">Sign Out</span>
+        </button>
+      </nav>
+      <div class="mt-auto p-4 rounded-2xl bg-surface-container-low border border-outline-variant/10">
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Member Level</p>
+        <p class="font-headline-md text-headline-md text-primary-fixed-dim font-bold">PRO_KINETIC</p>
+        <div class="w-full h-1 bg-surface-container-highest rounded-full mt-3 overflow-hidden">
+          <div class="w-3/4 h-full bg-primary-fixed-dim"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 py-8 pb-32">
+      <!-- Header Section -->
+      <section class="mb-10 flex justify-between items-start">
+        <div>
+          <h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Welcome back, Alex.</h1>
+          <p class="font-body-md text-body-md text-on-surface-variant">Your Kinetic Fleet is ready for your next urban journey.</p>
+        </div>
+        <div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant/30 flex items-center justify-center overflow-hidden">
+          <img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhTvfKcXJjN78H2iyrW4ZknAP75G0CM8yY4E-JWLNVMadboX6zJ6KDaJVUcBrzlG7wVLCb1-_YFuoUHDkUpagvFCABYxKVa4WX_rnbcrTZnrsgIaMM8cpM0hN0AJAe0U0hvlL5d9rpocUuPJgc86q57oryzGO4hzJELirFyRD4JwMqgggg4m7EC8929phZF8eF_sQPoplBglBHFA84A9Qe9lIw9543fiHEVYSVehnwyJpxs-cSML1Bko9Dnx36VWArcBDvOqc5qLcu"/>
+        </div>
+      </section>
+
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+        <!-- Active Ride Card -->
+        <div class="md:col-span-8 glass-panel rounded-[32px] p-8 flex flex-col justify-between min-h-[320px] relative overflow-hidden group">
+          <div class="absolute top-0 right-0 p-8">
+            <span class="flex items-center gap-2 bg-primary-fixed-dim/20 text-primary-fixed-dim px-4 py-1 rounded-full font-label-md text-label-md">
+              <span class="w-2 h-2 rounded-full bg-primary-fixed-dim animate-pulse"></span>
+              ACTIVE RIDE
+            </span>
+          </div>
+          <div>
+            <p class="font-label-sm text-label-sm text-on-surface-variant mb-1">CURRENT BIKE</p>
+            <h2 class="font-headline-lg text-headline-lg text-on-surface">KINETIC-S1 // MATTE CARBON</h2>
+          </div>
+          <div class="grid grid-cols-3 gap-4 mt-8">
+            <div>
+              <p class="font-label-sm text-label-sm text-on-surface-variant mb-2">TIME ELAPSED</p>
+              <p class="font-headline-md text-headline-md font-bold text-on-surface" id="timer">00:42:15</p>
+            </div>
+            <div>
+              <p class="font-label-sm text-label-sm text-on-surface-variant mb-2">DISTANCE</p>
+              <p class="font-headline-md text-headline-md font-bold text-on-surface">12.4 KM</p>
+            </div>
+            <div class="flex flex-col">
+              <p class="font-label-sm text-label-sm text-on-surface-variant mb-2">BATTERY</p>
+              <div class="flex items-center gap-3">
+                <p class="font-headline-md text-headline-md font-bold text-primary-fixed-dim">84%</p>
+                <div class="flex-1 h-3 bg-surface-container-highest rounded-full overflow-hidden">
+                  <div class="w-[84%] h-full battery-fill"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Decorative Background element -->
+          <div class="absolute bottom-[-20%] right-[-10%] opacity-10 group-hover:opacity-20 transition-opacity">
+            <span class="material-symbols-outlined text-[200px]" style="font-variation-settings: 'wght' 200;">electric_bolt</span>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="md:col-span-4 glass-panel rounded-[32px] p-8">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-headline-md text-headline-md text-on-surface">Activity</h3>
+            <span class="material-symbols-outlined text-on-surface-variant">history</span>
+          </div>
+          <div class="space-y-6">
+            <div class="flex gap-4 items-start">
+              <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-primary-fixed-dim text-sm">navigation</span>
+              </div>
+              <div class="flex-1">
+                <p class="font-label-md text-label-md text-on-surface">City Center Hub</p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant">Yesterday, 18:30 • 5.2 km</p>
+              </div>
+              <p class="font-label-md text-label-md text-on-surface">$4.20</p>
+            </div>
+            <div class="flex gap-4 items-start">
+              <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-primary-fixed-dim text-sm">navigation</span>
+              </div>
+              <div class="flex-1">
+                <p class="font-label-md text-label-md text-on-surface">Tech District</p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant">Oct 24, 08:15 • 3.8 km</p>
+              </div>
+              <p class="font-label-md text-label-md text-on-surface">$3.50</p>
+            </div>
+            <div class="flex gap-4 items-start">
+              <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-primary-fixed-dim text-sm">navigation</span>
+              </div>
+              <div class="flex-1">
+                <p class="font-label-md text-label-md text-on-surface">Green Park North</p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant">Oct 22, 14:45 • 8.1 km</p>
+              </div>
+              <p class="font-label-md text-label-md text-on-surface">$6.15</p>
+            </div>
+          </div>
+          <button class="w-full mt-8 py-3 font-label-md text-label-md text-on-surface-variant hover:text-primary-fixed-dim border border-outline-variant/30 rounded-xl transition-all">View All Activity</button>
+        </div>
+
+        <!-- Map Widget -->
+        <div class="md:col-span-12 glass-panel rounded-[32px] overflow-hidden min-h-[400px] relative">
+          <div class="absolute inset-0 z-0">
+            <img alt="Map" class="w-full h-full object-cover grayscale opacity-40 contrast-125" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOviTr--9DcKEZjTYZinpd3qLLXrC3lJ3bddF9ThrM3ewnWXgco053wug-WmXPESQ99Eb93Fun2ACWMyU8OMCB3jQofrx0O6BwEVOpCa6P_AbD-nAuNr1OUhdzRLPsY4XT2wgnH0fbaw5j1v6dw9TuY9QEAxMZbIr1qUcLRBJnPXANUQB5zRmV6r63fyfN6jPm5xgfqJAA4rS_GnTP2NKAtbePzjCHaG2MF_jqb6DA7mN7l4lWPC1lFmyHAECPDPg0G8bfPYm71rbZ"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+          </div>
+          <div class="relative z-10 p-8 flex flex-col h-full justify-between pointer-events-none">
+            <div class="flex justify-between items-start">
+              <div class="bg-surface-container-lowest/80 backdrop-blur-md p-4 rounded-2xl border border-outline-variant/20 pointer-events-auto">
+                <h3 class="font-headline-md text-headline-md text-on-surface mb-1">Nearby Hubs</h3>
+                <div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+                  <span class="material-symbols-outlined text-primary-fixed-dim text-sm">near_me</span>
+                  San Francisco, CA
+                </div>
+              </div>
+              <div class="flex flex-col gap-2 pointer-events-auto">
+                <button class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center text-on-surface hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-all border border-outline-variant/30">
+                  <span class="material-symbols-outlined">add</span>
+                </button>
+                <button class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center text-on-surface hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-all border border-outline-variant/30">
+                  <span class="material-symbols-outlined">remove</span>
+                </button>
+              </div>
+            </div>
+            <div class="flex gap-4 pointer-events-auto overflow-x-auto pb-4" style="scrollbar-width: none;">
+              <div class="bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-2xl border border-outline-variant/20 min-w-[240px]">
+                <div class="flex justify-between items-start mb-2">
+                  <p class="font-label-md text-label-md text-on-surface font-bold">Union Square Hub</p>
+                  <span class="text-primary-fixed-dim font-label-sm text-label-sm">0.4 km</span>
+                </div>
+                <p class="font-label-sm text-label-sm text-on-surface-variant mb-3">12 Bikes Available</p>
+                <div class="flex gap-2">
+                  <span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-md text-on-surface-variant uppercase">Urban</span>
+                  <span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-md text-on-surface-variant uppercase">S-Series</span>
+                </div>
+              </div>
+              <div class="bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-2xl border border-outline-variant/20 min-w-[240px]">
+                <div class="flex justify-between items-start mb-2">
+                  <p class="font-label-md text-label-md text-on-surface font-bold">Market St. Express</p>
+                  <span class="text-primary-fixed-dim font-label-sm text-label-sm">0.9 km</span>
+                </div>
+                <p class="font-label-sm text-label-sm text-on-surface-variant mb-3">4 Bikes Available</p>
+                <div class="flex gap-2">
+                  <span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-md text-on-surface-variant uppercase">Mountain</span>
+                  <span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-md text-on-surface-variant uppercase">G-Series</span>
+                </div>
+              </div>
+              <div class="bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-2xl border border-outline-variant/20 min-w-[240px]">
+                <div class="flex justify-between items-start mb-2">
+                  <p class="font-label-md text-label-md text-on-surface font-bold">Embarcadero Dock</p>
+                  <span class="text-primary-fixed-dim font-label-sm text-label-sm">1.2 km</span>
+                </div>
+                <p class="font-label-sm text-label-sm text-on-surface-variant mb-3">8 Bikes Available</p>
+                <div class="flex gap-2">
+                  <span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-md text-on-surface-variant uppercase">Cargo</span>
+                  <span class="px-2 py-1 bg-surface-container-high rounded text-[10px] font-label-md text-on-surface-variant uppercase">X-Series</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating Action Button -->
+  <button class="fixed bottom-10 right-10 flex items-center gap-3 px-8 py-4 bg-primary-fixed-dim rounded-full text-on-primary-fixed font-label-md text-label-md font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all z-50 group">
+    <span class="material-symbols-outlined font-bold group-hover:rotate-90 transition-transform">add_circle</span>
+    START NEW RIDE
+  </button>
+
+  <!-- Dashboard Footer -->
+  <footer class="w-full py-12 bg-surface-dim mt-20 border-t border-outline-variant/10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+      <div class="flex flex-col gap-4">
+        <div class="font-headline-md text-headline-md font-bold text-on-surface">VELO_KINETIC</div>
+        <p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 VELO_KINETIC. PRECISION URBAN MOBILITY.</p>
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="font-label-md text-label-md text-primary-fixed-dim uppercase tracking-wider mb-2">Legal</p>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Terms of Service</a>
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="font-label-md text-label-md text-primary-fixed-dim uppercase tracking-wider mb-2">Fleet</p>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Fleet Support</a>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Safety Manual</a>
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="font-label-md text-label-md text-primary-fixed-dim uppercase tracking-wider mb-2">Impact</p>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Sustainability Report</a>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">Carbon Tracking</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================================== -->
+<!-- JAVASCRIPT: PAGE ROUTING              -->
+<!-- ===================================== -->
+<script>
+  function showPage(pageName) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Show target page
+    const target = document.getElementById('page-' + pageName);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+    // Update nav styling
+    document.querySelectorAll('.nav-link[data-page]').forEach(link => {
+      link.classList.toggle('active', link.dataset.page === pageName);
+    });
+  }
+
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('open');
+  }
+
+  function scrollToSection(sectionId) {
+    setTimeout(() => {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  }
+
+  function scrollToFleet() { scrollToSection('section-fleet'); }
+  function scrollToHowItWorks() { scrollToSection('section-how'); }
+  function scrollToLocations() { scrollToSection('section-locations'); }
+
+  // Live ride timer on dashboard
+  let timerSeconds = 42 * 60 + 15;
+  setInterval(() => {
+    timerSeconds++;
+    const h = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
+    const s = String(timerSeconds % 60).padStart(2, '0');
+    const timerEl = document.getElementById('timer');
+    if (timerEl) timerEl.textContent = `${h}:${m}:${s}`;
+  }, 1000);
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('mobile-menu');
+    const header = document.querySelector('header');
+    if (!header.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>
